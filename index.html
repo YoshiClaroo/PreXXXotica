@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerías de Fotos</title>
+    <style>
+        /* Estilos generales */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white; /* Fondo blanco */
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Encabezado */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8; /* Fondo gris claro para el encabezado */
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Logo */
+        .logo {
+            width: 50px; /* Tamaño del logo */
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        /* Título */
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Contenedor de las galerías */
+        .galleries {
+            margin-top: 80px; /* Espacio para el encabezado */
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        /* Estilo de cada galería */
+        .gallery {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Nombre de la galería */
+        .gallery-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* Contenedor de la imagen y botones */
+        .image-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Contenedor de la imagen */
+        .image-container {
+            width: 300px; /* Ancho fijo */
+            height: 300px; /* Alto fijo */
+            overflow: hidden; /* Oculta el exceso de la imagen */
+            border-radius: 8px; /* Bordes redondeados */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        }
+
+        /* Estilo de la imagen */
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+        }
+
+        /* Botones de navegación */
+        .nav-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .nav-button:hover {
+            background-color: #555;
+        }
+
+        /* Botón de redirección */
+        .redirect-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .redirect-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Botones de grupo */
+        .group-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .group-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .group-button:hover {
+            background-color: #555;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            width: 100%;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <!-- Logo con enlace -->
+        <a href="https://ejemplo.com" target="_blank">
+            <img src="https://i.postimg.cc/639NdrvT/Pre-XXXotica-1.png" alt="Logo" class="logo">
+        </a>
+        <!-- Título -->
+        <div class="title"> PreXXXotica </div>
+    </header>
+
+    <!-- Contenedor de las galerías -->
+    <div class="galleries" id="galleriesContainer">
+        <!-- Las galerías se cargarán dinámicamente aquí -->
+    </div>
+
+    <!-- Botones de grupo -->
+    <div class="group-buttons" id="groupButtons">
+        <!-- Los botones de grupo se generarán dinámicamente -->
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Todos los derechos reservados &copy; 2025</p>
+    </footer>
+
+    <script>
+        // Lista de grupos de galerías
+        const galleryGroups = [
+            {
+                name: "Grupo 1",
+                galleries: [
+                    { name: "Galería 1", images: ["https://ejemplo.com/foto1.jpg", "https://ejemplo.com/foto2.jpg"] },
+                    { name: "Galería 2", images: ["https://ejemplo.com/foto3.jpg", "https://ejemplo.com/foto4.jpg"] },
+                ]
+            },
+            {
+                name: "Grupo 2",
+                galleries: [
+                    { name: "Galería 3", images: ["https://ejemplo.com/foto5.jpg", "https://ejemplo.com/foto6.jpg"] },
+                    { name: "Galería 4", images: ["https://ejemplo.com/foto7.jpg", "https://ejemplo.com/foto8.jpg"] },
+                ]
+            }
+        ];
+
+        let currentGroupIndex = 0; // Índice del grupo actual
+
+        // Función para mostrar los botones de grupo
+        function showGroupButtons() {
+            const groupButtonsContainer = document.getElementById("groupButtons");
+            groupButtonsContainer.innerHTML = ""; // Limpiar el contenedor
+
+            galleryGroups.forEach((group, index) => {
+                const button = document.createElement("button");
+                button.textContent = group.name;
+                button.classList.add("group-button");
+                button.addEventListener("click", () => {
+                    currentGroupIndex = index;
+                    window.location.hash = `#${index + 1}`; // Actualizar el hash de la URL
+                    showGalleries();
+                });
+                groupButtonsContainer.appendChild(button);
+            });
+        }
+
+        // Función para mostrar las galerías del grupo actual
+        function showGalleries() {
+            const galleriesContainer = document.getElementById("galleriesContainer");
+            galleriesContainer.innerHTML = ""; // Limpiar el contenedor
+
+            const currentGroup = galleryGroups[currentGroupIndex];
+            currentGroup.galleries.forEach((gallery, index) => {
+                const galleryId = `gallery${index + 1}`;
+                const galleryHTML = `
+                    <div class="gallery" id="${galleryId}">
+                        <div class="gallery-name">${gallery.name}</div>
+                        <div class="image-navigation">
+                            <button class="nav-button" onclick="prevImage('${galleryId}')">←</button>
+                            <div class="image-container">
+                                <img id="currentImage${galleryId}" src="${gallery.images[0]}" alt="Foto">
+                            </div>
+                            <button class="nav-button" onclick="nextImage('${galleryId}')">→</button>
+                        </div>
+                        <a href="https://ejemplo.com/otra-pagina" class="redirect-button">Ver más fotos</a>
+                    </div>
+                `;
+                galleriesContainer.innerHTML += galleryHTML;
+            });
+
+            // Mostrar los botones de grupo debajo de la última galería
+            showGroupButtons();
+        }
+
+        // Función para mostrar la imagen actual de una galería
+        function showImage(galleryId) {
+            const currentGroup = galleryGroups[currentGroupIndex];
+            const gallery = currentGroup.galleries.find((g, index) => `gallery${index + 1}` === galleryId);
+            const imageElement = document.getElementById(`currentImage${galleryId}`);
+            imageElement.src = gallery.images[gallery.currentIndex || 0];
+        }
+
+        // Función para retroceder en una galería
+        function prevImage(galleryId) {
+            const currentGroup = galleryGroups[currentGroupIndex];
+            const gallery = currentGroup.galleries.find((g, index) => `gallery${index + 1}` === galleryId);
+            if (!gallery.currentIndex) gallery.currentIndex = 0;
+            if (gallery.currentIndex > 0) {
+                gallery.currentIndex--;
+            } else {
+                gallery.currentIndex = gallery.images.length - 1;
+            }
+            showImage(galleryId);
+        }
+
+        // Función para avanzar en una galería
+        function nextImage(galleryId) {
+            const currentGroup = galleryGroups[currentGroupIndex];
+            const gallery = currentGroup.galleries.find((g, index) => `gallery${index + 1}` === galleryId);
+            if (!gallery.currentIndex) gallery.currentIndex = 0;
+            if (gallery.currentIndex < gallery.images.length - 1) {
+                gallery.currentIndex++;
+            } else {
+                gallery.currentIndex = 0;
+            }
+            showImage(galleryId);
+        }
+
+        // Función para cargar el grupo según el hash de la URL
+        function loadGroupFromHash() {
+            const hash = window.location.hash;
+            if (hash) {
+                const groupNumber = parseInt(hash.replace("#", ""), 10);
+                if (!isNaN(groupNumber)) {
+                    currentGroupIndex = groupNumber - 1; // Ajustar el índice
+                }
+            }
+            showGalleries();
+        }
+
+        // Mostrar las galerías y los botones de grupo al cargar la página
+        loadGroupFromHash();
+
+        // Escuchar cambios en el hash de la URL
+        window.addEventListener("hashchange", loadGroupFromHash);
+    </script>
+</body>
+</html>
